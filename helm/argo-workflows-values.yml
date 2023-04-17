@@ -1,0 +1,13 @@
+---
+controller:
+  metricsConfig:
+    enabled: true
+server:
+  ingress:
+    enabled: true
+    hosts:
+      - argo.localhost
+    ingressClassName: kong
+  secure: false
+  auth:
+    enabled: false

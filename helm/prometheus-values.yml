@@ -1,0 +1,21 @@
+---
+
+alertmanager:
+  ingress:
+    enabled: true
+    hosts:
+      - alertmanager.localhost
+    ingressClassName: kong
+grafana:
+  ingress:
+    enabled: true
+    hosts:
+      - grafana.localhost
+    ingressClassName: kong
+  adminPassword: placeholder
+prometheus:
+  ingress:
+    enabled: true
+    hosts:
+      - prometheus.localhost
+    ingressClassName: kong

@@ -1,0 +1,28 @@
+---
+# https://gitea.com/gitea/helm-chart/src/branch/main/values.yaml
+service:
+  http:
+    externalHost: gitea.localhost
+  ssh:
+    type: NodePort
+    nodePort: '30022'
+    externalHost: gitea-ssh.gitea.svc.cluster.local
+ingress:
+  enabled: true
+  className: kong
+  hosts:
+    - host: gitea.localhost
+      paths:
+        - path: /
+          pathType: Prefix
+gitea:
+  admin:
+    username: placeholder
+    password: placeholder
+  config:
+    webhook:
+      ALLOWED_HOST_LIST: '*'
+    security:
+      PASSWORD_COMPLEXITY: 'off'
+      MIN_PASSWORD_LENGTH: '1'
+      PASSWORD_CHECK_PWN: 'false'
