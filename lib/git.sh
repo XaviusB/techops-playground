@@ -19,3 +19,5 @@ function git_init() {
   git push -f origin master
   popd > /dev/null
 }
+
+export -f git_init

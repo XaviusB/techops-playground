@@ -19,9 +19,9 @@ nodes:
   image: kindest/node:v1.24.12
   extraMounts:
   - containerPath: /opt/data/
-    hostPath: /tmp/playground/data
+    hostPath: /home/xavier/tmp/playground/data
   - containerPath: /var/lib/containerd/
-    hostPath: /tmp/playground/data/containerd
+    hostPath: /home/xavier/tmp/playground/data/containerd
   extraPortMappings:
   - containerPort: 30080
     hostPort: 80

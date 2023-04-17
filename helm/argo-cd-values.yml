@@ -6,10 +6,16 @@ server:
     hosts:
       - argocd.localhost
     ingressClassName: kong
+  ingressGrpc:
+    enabled: true
+    hosts:
+      - argocd-grpc.localhost
+    ingressClassName: kong
   extraArgs:
     - --insecure
   auth:
     enabled: false
+
 configs:
   ssh:
     knownHosts: placeholder

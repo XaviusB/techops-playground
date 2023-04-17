@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 
 function generate_ssh_key() {
-  if [ ! -d ./ssh_keys ]; then
-    mkdir ./ssh_keys
+  if [ ! -d ./keys ]; then
+    mkdir ./keys
   fi
-  if [ ! -f ./ssh_keys/my_precious ]; then
+  if [ ! -f ./keys/my_precious ]; then
     log WARN "Generating SSH key"
-    ssh-keygen -t ed25519 -f ./ssh_keys/my_precious -q -N ""
+    ssh-keygen -t ed25519 -f ./keys/my_precious -q -N ""
   else
     log INFO "SSH key already exists"
   fi
-  export GIT_SSH_COMMAND="ssh -i ./ssh_keys/my_precious"
-  ssh-add ./ssh_keys/my_precious
+  export GIT_SSH_COMMAND="ssh -i ./keys/my_precious"
+  ssh-add ./keys/my_precious
 }
 
 
@@ -30,3 +30,6 @@ function gather_host_keys() {
   done
   echo "${tmp_keys}"
 }
+
+
+export -f generate_ssh_key gather_host_keys

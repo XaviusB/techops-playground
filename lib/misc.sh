@@ -35,3 +35,5 @@ function wait_for_url() {
   set -e
   echo "."
 }
+
+export -f wait_for_url log

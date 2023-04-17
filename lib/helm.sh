@@ -90,7 +90,7 @@ function helm_install_all() {
     port="30022")
   value_file=$(mktemp -p /tmp tmp.argocd-values-XXXXXXXXXX.yml)
   cp helm/argo-cd-values.yml "${value_file}"
-  yq e -i '.configs.credentialTemplates.ssh-creds.sshPrivateKey = load_str("ssh_keys/my_precious")' "${value_file}"
+  yq e -i '.configs.credentialTemplates.ssh-creds.sshPrivateKey = load_str("keys/my_precious")' "${value_file}"
   yq e -i '.configs.ssh.knownHosts = load_str("'"${host_key_file}"'")' "${value_file}"
   yq e -i '.configs.secret.argocdServerAdminPassword = env(BCRYPT_PASSWORD)' "${value_file}"
 
@@ -112,3 +112,5 @@ function helm_install_all() {
     name="argo-events" \
     namespace="argo-events"
 }
+
+export -f update_helm_repo helm_install helm_install_all

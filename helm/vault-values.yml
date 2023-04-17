@@ -1,0 +1,14 @@
+---
+# https://github.com/hashicorp/vault-helm/blob/main/values.yaml
+injector:
+  enabled: true
+ui:
+  enabled: true
+server:
+  ingress:
+    enabled: true
+    ingressClassName: kong
+    hosts:
+      - host: vault.localhost
+        paths:
+          - /

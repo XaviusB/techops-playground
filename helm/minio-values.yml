@@ -1,0 +1,17 @@
+---
+# https://githkub.com/bitnami/charts/blob/main/bitnami/minio/values.yaml
+ingress:
+  enabled: true
+  ingressClassName: kong
+  hostname: minio.localhost
+  path: /
+  pathType: Prefix
+apiIngress:
+  enabled: true
+  ingressClassName: kong
+  hostname: api.minio.localhost
+  path: /
+  pathType: Prefix
+auth:
+  rootUser: placeholder
+  rootPassword: placeholder

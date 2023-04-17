@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  generation: 1
+  labels:
+    truc: machin
+  name: argo-workflows-server
+spec:
+  ingressClassName: kong
+  rules:
+  - host: webhook.localhost
+    http:
+      paths:
+      - backend:
+          service:
+            name: webhook-eventsource-svc
+            port:
+              number: 12000
+        path: /
+        pathType: Prefix

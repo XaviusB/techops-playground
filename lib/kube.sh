@@ -30,3 +30,5 @@ spec:
     - CreateNamespace=true
 EOF
 }
+
+export -f create_app

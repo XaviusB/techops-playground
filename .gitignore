@@ -1,2 +1,7 @@
 *.kubeconfig
-ssh_keys
+keys/
+
+.terraform
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup

@@ -166,3 +166,5 @@ function create_gitea_org_label() {
       }'
   fi
 }
+
+export -f create_gitea_org create_gitea_org_label create_gitea_repo add_repo_key add_repo_webhook

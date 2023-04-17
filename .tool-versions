@@ -2,3 +2,6 @@ kind 0.18.0
 helm 3.11.2
 argo 3.4.7
 argocd 2.6.7
+mc 2023-04-12T02-21-51Z
+terraform 1.4.6
+vault 1.13.1
