@@ -1,0 +1,44 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: argo-workflow-executor
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - get
+      - watch
+      - list
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - pods/log
+    verbs:
+      - get
+      - watch
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - clusterworkflowtemplates
+      - cronworkflows
+      - workflowtaskresults
+      - workflowtemplates
+      - workflows
+    verbs:
+      - create
+      - patch
+      - get
+      - watch
+      - list
+      - delete

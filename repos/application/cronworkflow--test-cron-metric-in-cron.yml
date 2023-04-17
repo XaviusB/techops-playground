@@ -1,0 +1,54 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: CronWorkflow
+metadata:
+  name: test-cron-metric-in-cron
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 3
+  schedule: "* * * * *"
+  serviceAccountName: workflow-executor
+  successfulJobsHistoryLimit: 1
+  workflowSpec:
+    entrypoint: whalesay
+    metrics:
+      prometheus:
+        - name: workflow_duration_seconds
+          help: Duration of the workflow (in seconds)
+          labels:
+            - key: cronworkflow
+              value: test-cron
+            - key: status
+              value: '{{status}}'
+            - key: message
+              valueFrom:
+                configMapKeyRef:
+                  name: info
+                  key: ENV_NAME
+          gauge:
+            realtime: false
+            value: '{{workflow.duration}}'
+        - name: workflow_failed_count
+          help: Count workflows with 'Failed' status
+          labels:
+            - key: cronworkflow
+              value: test-cron
+            - key: status
+              value: '{{status}}'
+            - key: message
+              valueFrom:
+                configMapKeyRef:
+                  name: info
+                  key: ENV_NAME
+          when: '{{status}} == Failed'
+          counter:
+            value: '1'
+    arguments:
+      parameters:
+        - name: message
+          valueFrom:
+            configMapKeyRef:
+              name: info
+              key: ENV_NAME
+    workflowTemplateRef:
+      name: test-template-without-metrics
