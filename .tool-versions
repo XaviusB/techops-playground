@@ -1,0 +1,4 @@
+kind 0.18.0
+helm 3.11.2
+argo 3.4.7
+argocd 2.6.7

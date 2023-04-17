@@ -1,0 +1,9 @@
+---
+# https://artifacthub.io/packages/helm/bitnami/apache
+ingress:
+  hostname: apache.localhost
+  enabled: true
+  ingressClassName: kong
+  hosts:
+    - name: apache.localhost
+      path: /

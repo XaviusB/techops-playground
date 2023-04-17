@@ -1,0 +1,34 @@
+---
+# https://github.com/argoproj/argo-helm/blob/main/charts/argo-cd/values.yaml
+server:
+  ingress:
+    enabled: true
+    hosts:
+      - argocd.localhost
+    ingressClassName: kong
+  extraArgs:
+    - --insecure
+  auth:
+    enabled: false
+configs:
+  ssh:
+    knownHosts: placeholder
+  params:
+    server:
+      insecure: true
+  credentialTemplates:
+    ssh-creds:
+      url: git@gitea-ssh.gitea.svc.cluster.local
+      sshPrivateKey: placeholder
+      name: gitea
+  repositories:
+    argo-workflows-playground:
+      url: git@gitea-ssh.gitea.svc.cluster.local:root/argo-workflows-playground.git
+      name: argo-workflows-playground
+      type: git
+    events:
+      url: git@gitea-ssh.gitea.svc.cluster.local:root/events.git
+      name: events
+      type: git
+  secret:
+    argocdServerAdminPassword: placeholder

@@ -1,0 +1,8 @@
+---
+# https://github.com/Kong/charts/blob/main/charts/kong/values.yaml
+proxy:
+  type: NodePort
+  http:
+    nodePort: 30080
+  tls:
+    nodePort: 30443
