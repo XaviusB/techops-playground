@@ -33,7 +33,7 @@ metadata:
   name: ${namespace}
 EOF
 
-  helm upgrade \
+  echo helm upgrade \
     -i "${name}" "${repo_name}/${chart_name}" \
     --values "${values_file}" \
     --namespace "${namespace}" \
@@ -42,7 +42,7 @@ EOF
 }
 
 function helm_install_all() {
-  helm_install \
+  echo helm_install \
     repo_name="kong" \
     repo_url="https://charts.konghq.com" \
     chart_name="kong" \

@@ -16,34 +16,17 @@ export GITEA_USERNAME="root"
 export GITEA_ORG="myOrg"
 export MINIO_USERNAME="adminadmin"  # 8 charts min
 export MINIO_PASSWORD="adminadmin"  # 8 charts min
-export LDAP_PASSWORD="admin"  # 8 charts min
 
-BCRYPT_PASSWORD=$(curl -sSL \
-  --request POST \
-  --data "password=${PASSWORD}&cost=10" \
-  https://www.toptal.com/developers/bcrypt/api/generate-hash.json  | jq -r '.hash')
+BCRYPT_PASSWORD=$(docker run --rm -it johnstarich/bcrypt -p "${PASSWORD}" -s 14)
 export BCRYPT_PASSWORD
 
-#shellcheck source=/dev/null
+shellcheck source=/dev/null
 for f in ./lib/*.sh; do source "${f}"; done
 
 
 main() {
-  # update_helm_repo
+  update_helm_repo
   generate_ssh_key
-
-  values_file=$(mktemp -p /tmp openldap-values.XXXXXXXX.yml)
-  cp helm/openldap-values.yml "${values_file}"
-  yq e -i '.global.adminPassword = env(LDAP_PASSWORD)' "${values_file}"
-  yq e -i '.global.configPassword = env(LDAP_PASSWORD)' "${values_file}"
-  # helm_install \
-  #   repo_name="openldap" \
-  #   repo_url="https://jp-gouin.github.io/helm-openldap/" \
-  #   chart_name="openldap-stack-ha" \
-  #   chart_version="4.1.1" \
-  #   name="openldap" \
-  #   namespace="openldap" \
-  #   values_file="${values_file}"
 
   helm_install \
     repo_name="kong" \
@@ -53,17 +36,6 @@ main() {
     name="kong" \
     namespace="kong" \
     values_file="helm/kong-values.yml"
-
-  # helm_install \
-  #   repo_name="hashicorp" \
-  #   repo_url="https://helm.releases.hashicorp.com" \
-  #   chart_name="vault" \
-  #   chart_version="0.24.1" \
-  #   name="vault" \
-  #   namespace="vault"
-  # wait_for_url url="http://vault.localhost/ui/vault/init"
-  # vault_init
-
 
   value_file=$(mktemp -p /tmp minio-values.XXXXXXXX.yml)
   cp helm/minio-values.yml "${value_file}"
@@ -78,31 +50,17 @@ main() {
     namespace="minio" \
     values_file="${value_file}"
 
-  # value_file=$(mktemp -p /tmp keycloak-values.XXXXXXXX.yml)
-  # cp helm/keycloak-values.yml "${value_file}"
-  # yq e -i '.keycloak.username = env(USERNAME)' "${value_file}"
-  # yq e -i '.keycloak.password = env(PASSWORD)' "${value_file}"
-  # cat "${value_file}"
-  # helm_install \
-  #   repo_name="bitnami" \
-  #   repo_url="https://charts.bitnami.com/bitnami" \
-  #   chart_name="keycloak" \
-  #   chart_version="14.2.0" \
-  #   name="keycloak" \
-  #   namespace="vault" \
-  #   values_file="${value_file}"
-
-  # value_file=$(mktemp -p /tmp prometheus-values.XXXXXXXX.yml)
-  # cp helm/prometheus-values.yml "${value_file}"
-  # yq e -i '.grafana.adminPassword = env(PASSWORD)' "${value_file}"
-  # helm_install \
-  #   repo_name="prometheus-community" \
-  #   repo_url="https://prometheus-community.github.io/helm-charts" \
-  #   chart_name="kube-prometheus-stack" \
-  #   chart_version="45.10.1" \
-  #   name="prometheus" \
-  #   namespace="prometheus" \
-  #   values_file="${value_file}"
+  value_file=$(mktemp -p /tmp prometheus-values.XXXXXXXX.yml)
+  cp helm/prometheus-values.yml "${value_file}"
+  yq e -i '.grafana.adminPassword = env(PASSWORD)' "${value_file}"
+  helm_install \
+    repo_name="prometheus-community" \
+    repo_url="https://prometheus-community.github.io/helm-charts" \
+    chart_name="kube-prometheus-stack" \
+    chart_version="45.10.1" \
+    name="prometheus" \
+    namespace="prometheus" \
+    values_file="${value_file}"
 
   helm_install \
     repo_name="argo" \
@@ -205,7 +163,7 @@ main() {
     argocd app sync "${repo_name}" \
       --force \
       --async \
-      --kube-context kind-selfdestroy || true
+      --kube-context kind-selfdestroy 2>/dev/null || true
   done
 
   log DEBUG "Following ingress available"
